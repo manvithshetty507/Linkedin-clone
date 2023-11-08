@@ -4,6 +4,7 @@ import { auth } from './firebase';
 import { useDispatch } from 'react-redux';
 import { login } from './features/userSlice';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, updateProfile } from 'firebase/auth';
 
 
 function Login() {
@@ -13,27 +14,34 @@ function Login() {
   const [profilePic, setProfilePic] = useState('');
   const dispatch = useDispatch();
 
-  const loginToApp = (e) => {
-    e.preventDefault();
-    // Handle login
-  };
+  // const loginToApp = (e) => {
+  //   e.preventDefault();
+  //   // Handle login
+  // };
 
-  const register = () => {
+  const register = (e) => {
+    e.preventDefault();
     if (!name) {
       alert('Please enter your full name');
       return;
     }
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userAuth) => {
-        userAuth.user.updateProfile({
+    
+    const auth = getAuth(); // Get the authentication instance
+  
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        
+        // Use updateProfile to set the user's displayName and photoURL
+        updateProfile(user, {
           displayName: name,
           photoURL: profilePic,
         })
           .then(() => {
             dispatch(
               login({
-                email: userAuth.user.email,
-                uid: userAuth.user.uid,
+                email: user.email,
+                uid: user.uid,
                 displayName: name,
                 photoURL: profilePic,
               })
@@ -44,12 +52,14 @@ function Login() {
       .catch((error) => alert(error.message));
   };
 
-  const signIn = () => {
-    auth.signInWithEmailAndPassword(email, password)
+
+  const signIn = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password) // Use signInWithEmailAndPassword from auth
       .then((userAuth) => {
         dispatch(
           login({
-            email: userAuth.user.email,
+            email,
             uid: userAuth.user.uid,
             displayName: userAuth.user.displayName,
             photoURL: userAuth.user.photoURL,
