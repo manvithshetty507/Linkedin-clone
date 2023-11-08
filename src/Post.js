@@ -18,7 +18,7 @@ function Post({name, description, message, photoUrl}) {
   return (
     <div className='post'>
         <div className='post__header'>
-            <Avatar />
+            <Avatar src={photoUrl}>description?[0].toUpperCase()</Avatar>
             <div className='post__info'>
                 <h2>{name}</h2>
                 <p>{description}</p>

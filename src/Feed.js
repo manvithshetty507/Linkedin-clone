@@ -10,12 +10,16 @@ import Post from './Post';
 import { getDocs, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import { db } from './firebase';
+import { useSelector } from 'react-redux';
+import { selectUser } from './features/userSlice';
 
 
 function Feed() {
 
     const [input, setInput] = useState("");
     const [posts, setPosts] = useState([]);
+
+    const user = useSelector(selectUser);
       
     
     useEffect(() => {
@@ -33,10 +37,10 @@ function Feed() {
     
         // Create a new post object with the input value
         const newPost = {
-            name: 'Messi Andreas',
-            description: 'This is via the db',
+            name: user?.displayName,
+            description: user?.email,
             message: input, // Set the message field to the input value
-            photoUrl: '',
+            photoUrl: user?.photoURL || "",
             timestamp: serverTimestamp(), // Add a timestamp
         };
     

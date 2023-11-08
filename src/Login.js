@@ -14,10 +14,10 @@ function Login() {
   const [profilePic, setProfilePic] = useState('');
   const dispatch = useDispatch();
 
-  // const loginToApp = (e) => {
-  //   e.preventDefault();
-  //   // Handle login
-  // };
+  const loginToApp = (e) => {
+    e.preventDefault();
+    // Handle login
+  };
 
   const register = (e) => {
     e.preventDefault();
