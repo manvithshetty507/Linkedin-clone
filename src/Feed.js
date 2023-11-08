@@ -7,7 +7,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import CalendarViewDayIcon from '@mui/icons-material/CalendarViewDay';
 import InputOption from './InputOption';
 import Post from './Post';
-import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { getDocs, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import { db } from './firebase';
 
@@ -25,41 +25,44 @@ function Feed() {
         };
     
         fetchPosts();
-    }, []);
+    }, [posts]);
     
 
     const sendPost = async (e) => {
         e.preventDefault();
     
-        // Create a new post object
+        // Create a new post object with the input value
         const newPost = {
             name: 'Messi Andreas',
             description: 'This is via the db',
-            message: input,
+            message: input, // Set the message field to the input value
             photoUrl: '',
+            timestamp: serverTimestamp(), // Add a timestamp
         };
     
         try {
             // Add the new post to the Firestore "posts" collection
             await addDoc(collection(db, 'posts'), newPost);
-    
             // Clear the input field after the post is added
-            setInput('');
         } catch (error) {
             console.error('Error adding post: ', error);
+        }finally{
+            setInput('');
         }
     };
+    
+
 
   return (
     <div className='feed'>
         <div className='feed__inputContainer'>
             <div className='feed__input'>
                 <CreateIcon />
-                <form>
+                <form onSubmit={sendPost}>
                     <input 
                         type='text'
                         onChange={e => setInput(e.target.value)}
-                        onClick={sendPost}
+                        value={input}
                     />
                     <button type='submit'>Send</button>
                 </form>
@@ -75,11 +78,18 @@ function Feed() {
 
         {/* Posts */}
 
-        {posts.map((post) => {
-            <Post />
-        })}
+        {posts
+            .sort((a, b) => b.data.timestamp - a.data.timestamp) // Sort posts by timestamp in descending order
+            .map((post) => (
+                <Post
+                key={post.id}
+                name={post.data.name}
+                description={post.data.description}
+                message={post.data.message}
+                photoUrl={post.data.photoUrl}
+                />
+            ))}
 
-        <Post name="messi andreas" description="this is a test" message="nice this is working" />
     </div>
   )
 }
