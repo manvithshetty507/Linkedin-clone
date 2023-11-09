@@ -3,6 +3,7 @@ import './App.css';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Feed from './Feed';
+import Widgets from './Widgets';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectUser } from './features/userSlice';
 import Login from './Login'; // Import the Login component
@@ -36,7 +37,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <div className="app">
       <Header />
 
       {!user ? (
@@ -45,6 +46,7 @@ function App() {
         <div className='app__body'>
           <Sidebar />
           <Feed />
+          <Widgets/>
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React , { forwardRef }from 'react'
 import { Avatar } from '@material-ui/core';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
@@ -14,9 +14,9 @@ body
 bottom part like comment etc
 */
 
-function Post({name, description, message, photoUrl}) {
+const Post = forwardRef(({name, description, message, photoUrl}, ref) => {
   return (
-    <div className='post'>
+    <div ref={ref} className='post'>
         <div className='post__header'>
             <Avatar src={photoUrl}>description?[0].toUpperCase()</Avatar>
             <div className='post__info'>
@@ -37,6 +37,6 @@ function Post({name, description, message, photoUrl}) {
         </div>
     </div>
   )
-}
+})
 
 export default Post

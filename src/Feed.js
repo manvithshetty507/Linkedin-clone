@@ -8,7 +8,7 @@ import CalendarViewDayIcon from '@mui/icons-material/CalendarViewDay';
 import InputOption from './InputOption';
 import Post from './Post';
 import { getDocs, collection, addDoc, serverTimestamp } from 'firebase/firestore';
-
+import FlipMove from 'react-flip-move';
 import { db } from './firebase';
 import { useSelector } from 'react-redux';
 import { selectUser } from './features/userSlice';
@@ -81,7 +81,7 @@ function Feed() {
         </div>
 
         {/* Posts */}
-
+        <FlipMove>
         {posts
             .sort((a, b) => b.data.timestamp - a.data.timestamp) // Sort posts by timestamp in descending order
             .map((post) => (
@@ -93,7 +93,7 @@ function Feed() {
                 photoUrl={post.data.photoUrl}
                 />
             ))}
-
+        </FlipMove>
     </div>
   )
 }
